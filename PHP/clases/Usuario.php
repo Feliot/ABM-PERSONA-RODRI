@@ -41,5 +41,28 @@ class Usuario
 			return false;
 		}
 	}
+
+	//InsertarNuevoUsuario($objDatos->usuario, $objDatos->password
+
+	public static function InsertarNuevoUsuario($usuario, $password) 
+	{	
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+		$consulta =$objetoAccesoDato->RetornarConsulta("select * from usuarios where usuario =:usuario");
+		$consulta->bindParam(':usuario', $usuario);
+		$consulta->execute();
+		$result = $consulta->fetchAll();
+		if($result){
+			return false;
+		}
+		else
+		{	
+			$consulta = $objetoAccesoDato->RetornarConsulta("INSERT INTO usuarios(usuario, password) VALUES (:usuario, :password)");
+			$consulta->bindParam(':usuario', $usuario);
+			$consulta->bindParam(':password', $password);
+			$consulta->execute();
+			return true;
+		}
+	}
+
 }
 ?>

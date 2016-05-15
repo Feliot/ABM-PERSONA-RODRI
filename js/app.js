@@ -16,7 +16,8 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
           controller: 'controlMenu'
         },
         'menuSuperior': {
-          templateUrl: 'template/menuSuperior.html'
+          templateUrl: 'template/menuSuperior.html',
+          controller: 'controlMenuSuperior'
         }
       },
       url: '/menu'
@@ -31,7 +32,8 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
         controller: 'controlGrilla'
       },
       'menuSuperior': {
-        templateUrl: 'template/menuSuperior.html'
+        templateUrl: 'template/menuSuperior.html',
+         controller: 'controlMenuSuperior'
       }
     }
   })
@@ -44,7 +46,8 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
         controller: 'controlAlta'
       },
       'menuSuperior': {
-        templateUrl: 'template/menuSuperior.html'
+        templateUrl: 'template/menuSuperior.html',
+         controller: 'controlMenuSuperior'
       }
     }
 
@@ -59,7 +62,8 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
         controller: 'controlModificacion'
       },
       'menuSuperior': {
-        templateUrl: 'template/menuSuperior.html'
+        templateUrl: 'template/menuSuperior.html',
+          controller: 'controlMenuSuperior'
       }
     }
 
@@ -73,7 +77,8 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
         controller: 'controlLogin'
       },
       'menuSuperior': {
-        templateUrl: 'template/menuSuperior.html'
+        templateUrl: 'template/menuSuperior.html',
+          controller: 'controlMenuSuperior'
       }
     }
 
@@ -87,7 +92,8 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
         controller: 'controlSignUp'
       },
       'menuSuperior': {
-        templateUrl: 'template/menuSuperior.html'
+        templateUrl: 'template/menuSuperior.html',
+          controller: 'controlMenuSuperior'
       }
     }
 
@@ -245,6 +251,9 @@ app.controller('controlModificacion', function($scope, $http, $state, $statePara
       //SI NO ESTOY AUTENTICADO, REDIRECCIONO A LOGIN
       $state.go('login');
     }
+    else{
+
+    }
     $scope.persona = {};
     $scope.DatoTest = "**Modificar**";
     $scope.uploader = new FileUploader({
@@ -350,6 +359,10 @@ app.controller('controlLogin', function($scope, $http, $location, $state, $auth)
 
   $scope.Login = function() {
     console.info("ENTRÉ A LA FUNCIÓN LOGIN", $scope.cuenta.usuario);
+    toastr.options = {
+                'closeButton' : true,
+                'progressBar' : true
+            };
     $auth.login({
         usuario: $scope.cuenta.usuario,
         password: $scope.cuenta.password
@@ -360,14 +373,13 @@ app.controller('controlLogin', function($scope, $http, $location, $state, $auth)
         console.info("ENTRÓ POR LOGUEO CORRECTO", response);
         console.info($auth.isAuthenticated());
         console.info("datos auth en menu", $auth.getPayload());
-
+        toastr.success('LOGUEO CORRECTO!');
+        $scope.infoDeUsuario = $scope.cuenta.usuario;
+       // toastr.success('Logueo correcto!');
+     
         //$location.path("/private")
       })
       .catch(function(response) {
-        toastr.options = {
-                'closeButton' : true,
-                'progressBar' : true
-            };
         toastr.error( response.data.data, response.statusText);
         //toastr.error('I do not think that word means what you think it means.', 'Inconceivable!');
         console.info("ALTO ERROR WACHIN", response);
@@ -386,18 +398,36 @@ app.controller('controlSignUp', function($scope, $http, $location, $state, $auth
   }
 
   $scope.SignUp = function() {
-    console.info("ENTRÉ A LA FUNCIÓN SIGNUP", $scope.cuenta.usuario);
+    console.info("ENTRÉ A LA FUNCIÓN SIGNUP", $scope.nuevaCuenta.usuario);
     $auth.signup({
         usuario: $scope.nuevaCuenta.usuario,
         password: $scope.nuevaCuenta.password
       })
       .then(function(response) {
-         $state.go('login');
+          console.info("CREACION CORRECTA", response);
+          toastr.success(response.data.data, response.statusText);
+          $state.go('login');
       })
       .catch(function(response) {
-        console.info("ALTO ERROR WACHIN", response);
-        console.info($auth.isAuthenticated());
+        console.info("CREACION CON ALTO ERROR WACHIN", response);
+        toastr.error( response.data.data, response.statusText);
+        //console.info("ALTO ERROR WACHIN", response);
+        //console.info($auth.isAuthenticated());
         // Si ha habido errores llegamos a esta parte
       });
   }
+});
+
+app.controller('controlMenuSuperior', function($scope, $http, $location, $state, $auth) {
+  console.info("CONTROLADOR DE MENU SUPERIOR", $auth.isAuthenticated());
+  $scope.Logout = function() {
+    console.info("ENTRÉ A LA FUNCIÓN SIGNUP", $scope.nuevaCuenta.usuario);
+    if (!$auth.isAuthenticated()) { return; }
+    $auth.logout()
+      .then(function() {
+        toastr.info('You have been logged out');
+        $state.go('login');
+      });
+
+  };
 });

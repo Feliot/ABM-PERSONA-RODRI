@@ -10,7 +10,7 @@ include_once '../clases/Usuario.php';
 $objDatos=json_decode(file_get_contents("php://input"));
 
 //$idUsuario=Usuario::ChequearUsuario($objDatos->usuario, $objDatos->clave); // devuelve id o flase si esta mal
-//print("LA RECALCADA CONCHA DE TU HERMANA PRINT");
+//print("LA RECALCADA CONCHA DE TU HERMANA AUTENTIFICADOR");
 //print(Usuario::CheckearUsuario($objDatos->usuario, $objDatos->password));	
 if (Usuario::CheckearUsuario($objDatos->usuario, $objDatos->password)) {
 	$token=array("usuario"=> $objDatos->usuario,
@@ -27,8 +27,9 @@ if (Usuario::CheckearUsuario($objDatos->usuario, $objDatos->password)) {
 	echo json_encode($arr);
 }
 else{
-	header("HTTP/1.1 500 Internal Server Error");
-    echo '{"data": "Exception occurred: LALALA POTE"}';
+	//header("HTTP/1.1 500 Internal Server Error");
+	header("HTTP/1.1 404 ERROR DE AUTENTICACION");
+    echo '{"data": "Usuario o contraseña incorrecto."}';
 }
 
 
