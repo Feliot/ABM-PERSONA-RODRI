@@ -1,0 +1,48 @@
+<html>
+<head>
+	<title>ABM angular PHP</title>
+	  
+		<!--?php require_once"partes/referencias.php" ;/**/?-->
+		
+
+      <!--script type="text/javascript" src="./bower_components/jquery/dist/jquery.js"></script-->
+       	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="http://www.octavio.com.ar/favicon.ico">
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+	<link rel="stylesheet" type="text/css" href="css/animacion.css">
+	<!--final de Estilos-->    
+
+
+ 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+  	<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  	<script src="bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
+  	<script src="bower_components/satellizer/satellizer.min.js"></script>
+ 	<script SRC="js/app.js" TYPE="text/javascript"></script>
+ 	<script type="text/javascript" src="js/directivas/ngThumb.js"></script>
+ 	<style type="text/css">
+
+
+
+ 	</style>
+	
+</head>
+<body ng-app="ABMangularPHP" 
+	<!--?php		
+		require_once"partes/barraDeMenu.php";
+	 ?-->
+
+ 
+	<div ui-view="menuSuperior">
+		
+	
+          
+	</div><!--del view menuSuperior-->
+
+	<div ui-view="principal">
+		
+	</div><!--del view-->
+</body>
+</html>
