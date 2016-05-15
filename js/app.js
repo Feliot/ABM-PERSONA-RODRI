@@ -4,7 +4,7 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
 
 .config(function($stateProvider, $urlRouterProvider, $authProvider) {
   $authProvider.loginUrl = 'ABM-PERSONA-RODRI/PHP/Sesiones/autentificador.php'; //"http://api.com/auth/login";
-  $authProvider.signupUrl = 'signupUrlPrueba'; //"http://api.com/auth/signup";
+  $authProvider.signupUrl = 'ABM-PERSONA-RODRI/PHP/Sesiones/CrearCuenta.php'; //"http://api.com/auth/signup";
   $authProvider.tokenName = 'tokenNamePrueba'; //"token";
   $authProvider.tokenPrefix = "tokenPrefixPrueba"; //"myApp",
 
@@ -79,6 +79,19 @@ var app = angular.module('ABMangularPHP', ['ngAnimate', 'ui.router', 'angularFil
 
   })
 
+  .state('signup', {
+    url: '/signup',
+    views: {
+      'principal': {
+        templateUrl: 'template/templateSignUp.html',
+        controller: 'controlSignUp'
+      },
+      'menuSuperior': {
+        templateUrl: 'template/menuSuperior.html'
+      }
+    }
+
+  })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 });
@@ -331,6 +344,10 @@ app.controller('controlLogin', function($scope, $http, $location, $state, $auth)
     $state.go('menu');
   }
 
+  $scope.IrASignUp = function() {
+    $state.go('signup');
+  }
+
   $scope.Login = function() {
     console.info("ENTRÉ A LA FUNCIÓN LOGIN", $scope.cuenta.usuario);
     $auth.login({
@@ -347,52 +364,40 @@ app.controller('controlLogin', function($scope, $http, $location, $state, $auth)
         //$location.path("/private")
       })
       .catch(function(response) {
+        toastr.options = {
+                'closeButton' : true,
+                'progressBar' : true
+            };
+        toastr.error( response.data.data, response.statusText);
+        //toastr.error('I do not think that word means what you think it means.', 'Inconceivable!');
         console.info("ALTO ERROR WACHIN", response);
         console.info($auth.isAuthenticated());
         // Si ha habido errores llegamos a esta parte
       });
   }
+});
 
-
-
-
-  //Ver que garcha uso de acá! :D 
-  /* $scope.persona = {};
-  $scope.persona.nombre = $("#nombre").val();
-  $scope.persona.clave = $("#clave").val();
-
-  console.info("DATOS DE LOGIN:", item, response, status, headers);
-
-  var funcionAjax = $.ajax({
-    url: "ValidarUsuario.php",
-    type: "post",
-    data: DatosLogin
-  });
-
-  funcionAjax.done(function(respuesta) {
-    alert(respuesta);
-    if (respuesta == "correcto") {
-      $("#MensajeError").val("");
-      window.location.href = "menu.php"; // vamos al menu
-    } else {
-      alert("NO esta registrado... ");
-
-      // mostrar mensaje "no esta en la base"
-      //vamos al registro
-      //window.location.href="registroJquery.php";
-    }
-  });
+app.controller('controlSignUp', function($scope, $http, $location, $state, $auth) {
+  $scope.DatoTest = "SIGNUP";
 
   if ($auth.isAuthenticated()) {
-    $state.go("alta");
-  } else {
-    $state.go("menu");
+    //SI ESTOY AUTENTICADO, REDIRECCIONO A MENÚ
+    $state.go('menu');
   }
 
-
-
-  $scope.authenticate = function(provider) {
-    $auth.authenticate(provider);
-  };
-*/
+  $scope.SignUp = function() {
+    console.info("ENTRÉ A LA FUNCIÓN SIGNUP", $scope.cuenta.usuario);
+    $auth.signup({
+        usuario: $scope.nuevaCuenta.usuario,
+        password: $scope.nuevaCuenta.password
+      })
+      .then(function(response) {
+         $state.go('login');
+      })
+      .catch(function(response) {
+        console.info("ALTO ERROR WACHIN", response);
+        console.info($auth.isAuthenticated());
+        // Si ha habido errores llegamos a esta parte
+      });
+  }
 });

@@ -25,7 +25,10 @@ if (Usuario::CheckearUsuario($objDatos->usuario, $objDatos->password)) {
 
 	//echo json_encode($array);
 	echo json_encode($arr);
-
+}
+else{
+	header("HTTP/1.1 500 Internal Server Error");
+    echo '{"data": "Exception occurred: LALALA POTE"}';
 }
 
 
